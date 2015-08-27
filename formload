@@ -1,0 +1,36 @@
+private void Form1_Load(object sender, EventArgs e)
+        {
+            // Create path for file
+            string CurrPath = Application.StartupPath;
+            string filename = CurrPath + "\\filename.txt";
+
+            // Create table for gridview
+            DataTable table = new DataTable();
+
+            // Add columns for table
+            table.Columns.Add("Word");
+            table.Columns.Add("Definition");
+            table.Columns.Add("Example");
+            
+            // Read from file
+            using (StreamReader reader = new StreamReader(filename))
+            {
+                // When file is not empty
+                while (!reader.EndOfStream)
+                {
+                    // Display in gridview with delimiter '*'
+                    string[] parts = reader.ReadLine().Split('*');
+                    table.Rows.Add(parts[0], parts[1], parts[2]);
+                }
+
+                // Manually set the data source of the gridview as table
+                DictionaryDisplay.DataSource = table;
+                this.DictionaryDisplay.Sort(this.DictionaryDisplay.Columns["Word"], ListSortDirection.Ascending);
+
+                // Close the file
+                reader.Close();
+            }
+
+            //Disables the Selection in the DataGridview at Initial Start-Up till user interacts 
+            DictionaryDisplay.ClearSelection();
+}
